@@ -1,7 +1,7 @@
 from django.urls import path, include
-from .views import PurchaseOrderCreateList, PurchaseOrderReadUpdateDelete
+from .views import PurchaseOrderCreateListView, PurchaseOrderReadUpdateDeleteView
 
 urlpatterns = [
-    path('', PurchaseOrderCreateList.as_view(), name='purchase-order-create-list'),
-    path('<purchase_order_id>', PurchaseOrderReadUpdateDelete.as_view(), name='purchase-order-create-list')
+    path('', PurchaseOrderCreateListView.as_view(), name='purchase-order-create-list'),
+    path('<purchase_order_id>', PurchaseOrderReadUpdateDeleteView.as_view(), name='purchase-order-read-update-delete')
 ]
