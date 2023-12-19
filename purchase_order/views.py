@@ -3,7 +3,7 @@ from vendor.authentication import CustomAuthentication
 from rest_framework.response import Response
 from rest_framework import status
 from .models import PurchaseOrder
-from .serializers import PurchaseOrderCreateListSerializer, PurchaseOrderReadUpdateDeleteSerializer
+from .serializers import PurchaseOrderCreateListSerializer, PurchaseOrderUpdateSerializer
 from rest_framework.mixins import ListModelMixin
 from rest_framework.generics import GenericAPIView
 
@@ -33,8 +33,8 @@ class PurchaseOrderCreateListView(GenericAPIView, ListModelMixin):
         return self.list(request, *args, **kwargs)
 
 
-class PurchaseOrderReadUpdateDeleteView(APIView):
-    pass
+class PurchaseOrderReadUpdateDeleteView(GenericAPIView):
+    serializer_class = PurchaseOrderUpdateSerializer
 
     def get(self, *args, **kwargs):
         code = status.HTTP_200_OK
@@ -47,7 +47,7 @@ class PurchaseOrderReadUpdateDeleteView(APIView):
         return Response(data, status=code)
 
     def put(self, request, *args, **kwargs):
-        serializer = PurchaseOrderReadUpdateDeleteSerializer(data=request.data, partial=True)
+        serializer = self.serializer_class(data=request.data, partial=True)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         data = serializer.validated_data

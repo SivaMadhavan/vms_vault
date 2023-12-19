@@ -57,7 +57,3 @@ class HistoricalPerformance(models.Model):
     average_response_time = models.FloatField(default=0, max_length=100)
     fulfillment_rate = models.FloatField(default=0, max_length=100)
 
-    @staticmethod
-    def get_metrics(request, *args, **kwargs):
-        qs = HistoricalPerformance.objects.filter(vendor_id=kwargs.get('vendor_id')).first()
-        return qs

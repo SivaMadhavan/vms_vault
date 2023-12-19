@@ -9,7 +9,7 @@ class PurchaseOrderCreateListSerializer(serializers.ModelSerializer):
         exclude = ('vendor',)
 
 
-class PurchaseOrderReadUpdateDeleteSerializer(serializers.ModelSerializer):
+class PurchaseOrderUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = PurchaseOrder
         fields = '__all__'

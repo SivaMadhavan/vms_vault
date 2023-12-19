@@ -35,16 +35,18 @@ class VendorCreateListView(GenericAPIView, ListModelMixin):
 
 
 class VendorReadUpdateDeleteView(GenericAPIView):
+    serializer_class = VendorCreateListSerializer
+
     def get(self, *args, **kwargs):
         vendor = Vendor.objects.get(pk=kwargs.get('vendor_id'))
         data = VendorCreateListSerializer(vendor).data
         return Response(data, status=HTTP_200_OK)
 
     def patch(self, request, *args, **kwargs):
-        serializer = VendorUpdateSerializer(data=request.data, partial=True)
-        if not serializer.is_valid():
-            return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
-        data = serializer.validated_data
+        self.serializer = VendorUpdateSerializer(data=request.data, partial=True)
+        if not self.serializer.is_valid():
+            return Response(self.serializer.errors, status=HTTP_400_BAD_REQUEST)
+        data = self.serializer.validated_data
         Vendor.objects.filter(pk=kwargs.get('vendor_id')).update(**data)
         return Response({"message": "Updated Successfully"}, status=HTTP_200_OK)
 
@@ -60,10 +62,18 @@ class VendorReadUpdateDeleteView(GenericAPIView):
         return Response({"message": message}, status=status)
 
 
-class VendorPerformance(GenericAPIView):
+from rest_framework.views import APIView
+
+
+class VendorPerformance(APIView):
     authentication_classes = (CustomAuthentication,)
+    serializer_class = VendorPerformanceSerializer
 
     def get(self, request, *args, **kwargs):
-        data = HistoricalPerformance.get_metrics(request, *args, **kwargs)
-        data = VendorPerformanceSerializer(data).data
-        return Response(data, status=HTTP_200_OK)
+        resp = {}
+        try:
+            data = HistoricalPerformance.objects.get(vendor_id=kwargs.get('vendor_id'))
+            resp['metrics'] = self.serializer_class(data).data
+        except Exception as e:
+            resp['metrics'] = None
+        return Response(resp, status=HTTP_200_OK)
