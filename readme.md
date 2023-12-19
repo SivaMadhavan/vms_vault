@@ -46,4 +46,5 @@ python manage.py runserver
 The complete API doc can be found here 
 http://localhost:8000/doc/
 
-![Screenshot from 2023-12-19 18-14-26.png](..%2F..%2F..%2FPictures%2FScreenshot%20from%202023-12-19%2018-14-26.png)
+![Screenshot from 2023-12-19 18-14-26](https://github.com/SivaMadhavan/vms_vault/assets/60845879/3ae16f10-7e5d-4732-b1af-74ae7113abab)
+
